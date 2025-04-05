@@ -4,7 +4,8 @@ import { IoMailOutline } from "react-icons/io5";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { CiBookmark } from "react-icons/ci";
 import { FiUser } from "react-icons/fi";
-import Button, {Logo} from "@/components/button"
+import Button, { Logo } from "@/components/Button";
+import FeedCard from "@/components/FeedCard";
 
 interface sideBarItems {
   title: string;
@@ -60,7 +61,15 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="col-span-6 border-l border-r border-gray-700"></div>
+      <div className="col-span-6 border-l border-r border-gray-700">
+        <FeedCard></FeedCard>
+        <FeedCard></FeedCard>
+        <FeedCard></FeedCard>
+        <FeedCard></FeedCard>
+        <FeedCard></FeedCard>
+        <FeedCard></FeedCard>
+        <FeedCard></FeedCard>
+      </div>
       <div className="col-span-3"></div>
     </div>
   );
