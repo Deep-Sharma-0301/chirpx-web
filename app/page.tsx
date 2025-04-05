@@ -6,6 +6,7 @@ import { CiBookmark } from "react-icons/ci";
 import { FiUser } from "react-icons/fi";
 import Button, { Logo } from "@/components/Button";
 import FeedCard from "@/components/FeedCard";
+import SignupPage from "@/components/Signup";
 
 interface sideBarItems {
   title: string;
@@ -70,7 +71,9 @@ export default function Home() {
         <FeedCard></FeedCard>
         <FeedCard></FeedCard>
       </div>
-      <div className="col-span-3"></div>
+      <div className="col-span-3">
+        <SignupPage></SignupPage>
+      </div>
     </div>
   );
 }

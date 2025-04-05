@@ -11,15 +11,25 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ user }) {
       // Only allow emails ending with "@gmail.com"
-      if (user?.email?.endsWith("@gmail.com")) {
-        return true
-      }
-      return false
+      return user?.email?.endsWith("@gmail.com") ?? false
     },
+    async jwt({ token, account }) {
+        // Only assign once on sign in
+        if (account?.access_token) {
+          token.accessToken = account.access_token
+        }
+        return token
+      },
+      async session({ session, token }) {
+  return {
+    ...session,
+    accessToken: token.accessToken,
+  }
+}
   },
   pages: {
+    error: "/auth/error",
     signIn: "/signup", // optional: custom signup page
-    error: "/auth/error", // optional: custom error page
   },
 })
 
