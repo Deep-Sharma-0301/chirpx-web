@@ -41,7 +41,7 @@ const sideBarMenuItems: sideBarItems[] = [
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-12 h-screen w-screen px-[250px] text-white bg-black">
+    <div className="grid grid-cols-12 h-screen px-[250px] text-white bg-black w-fit">
       <div className="col-span-3 mt-[10px]">
         <Logo></Logo>
         <div className="flex flex-col gap-4">
