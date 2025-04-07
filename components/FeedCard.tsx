@@ -4,23 +4,26 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { BiMessageRoundedDots } from "react-icons/bi";
 import { Tweet } from "@/gql/graphql";
+import { useRouter } from "next/navigation";
 
 // ✅ Accept tweet as a prop
 interface FeedCardProps {
-  data?: Tweet,
   tweet: {
     id: string;
     content: string;
     imageURL?: string;
     author: {
-      profileImageURL?: string;
+      id?: string; // <-- added for routing
       name: string;
-      profileImage?: string;
+      profileImageURL?: string;
     };
   };
 }
-
 export default function FeedCard({ tweet }: FeedCardProps) {
+  const router = useRouter();
+  // const {data} = tweet
+  console.log(tweet.imageURL)
+  
   return (
     <div className="grid grid-cols-12 border-x border-b border-[#606060] p-[3%] hover-box">
       <div className="col-span-1 text-center">
@@ -30,6 +33,7 @@ export default function FeedCard({ tweet }: FeedCardProps) {
           height={30}
           width={30}
           className="rounded-full mr-[10px]"
+          onClick={() => router.push(`/${tweet?.author.id}`)}
         />
       </div>
       <div className="col-span-11 ml-[10px]">

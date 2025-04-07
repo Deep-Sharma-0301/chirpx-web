@@ -73,7 +73,7 @@ export default function Sidebar() {
             alt="Profile"
             width={40}
             height={40}
-            className="rounded-full"
+            className="rounded-full mr-[10px]"
           />
           <span className="font-medium">{user.firstName} {user.lastName}</span>
         </div>

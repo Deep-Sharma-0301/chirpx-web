@@ -10,10 +10,13 @@ import { getSignedURLForTweetQuery } from "@/graphql/query/tweet";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useCurrentUser } from "@/hooks/user";
+import { useRouter } from "next/navigation";
+
 
 const client = getGraphQLClient()
 
 export default function TweetCard() {
+  const router = useRouter();
   const [content, setContent] = useState("");
   const [imageURL, setImageURL] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -73,6 +76,7 @@ export default function TweetCard() {
           height={30}
           width={30}
           className="rounded-full mr-[10px]"
+          onClick={() => router.push(`/${user?.id}`)}
         />
       </div>
 
