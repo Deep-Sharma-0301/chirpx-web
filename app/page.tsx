@@ -7,6 +7,7 @@ import { FiUser } from "react-icons/fi";
 import Button, { Logo } from "@/components/Button";
 import FeedCard from "@/components/FeedCard";
 import SignupPage from "@/components/Signup";
+import TweetCard from "@/components/TweetCard";
 
 interface sideBarItems {
   title: string;
@@ -63,6 +64,10 @@ export default function Home() {
       </div>
 
       <div className="col-span-6 border-l border-r border-gray-700">
+        <div>
+          {/* {here set the condition that id user is logged in then only show this} */}
+          <TweetCard></TweetCard>
+        </div>
         <FeedCard></FeedCard>
         <FeedCard></FeedCard>
         <FeedCard></FeedCard>

@@ -1,5 +1,6 @@
 "use client"
 
+import { graphqlClient } from "@/client/api"
 import { signIn, useSession, getSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect } from "react"
@@ -8,11 +9,29 @@ export default function GoogleSignInButton() {
   const { data: session, status } = useSession()
 
   useEffect(() => {
-    getSession().then((session) => {
-      console.log("🧠 Full Session:", session)
-      console.log("🪙 Access Token:", (session as any)?.accessToken)
-    })
-  }, [])
+    const fetchAndExchangeToken = async () => {
+      const currentSession = await getSession()
+      const googlelAuthToken = (currentSession as any)?.accessToken
+
+      if (googlelAuthToken) {
+        try {
+          const {jwtToken} = await graphqlClient.request('dummuy query', {token: googlelAuthToken })
+
+          const data = await jwtToken.json()
+          console.log("🎯 Your App JWT:", jwtToken)
+
+          // Store it locally (you can also use cookies)
+          localStorage.setItem("jwt_token", data.jwt)
+        } catch (err) {
+          console.error("❌ Failed to exchange token:", err)
+        }
+      }
+    }
+
+    if (status === "authenticated") {
+      fetchAndExchangeToken()
+    }
+  }, [status])
 
   if (status === "authenticated") {
     return (
