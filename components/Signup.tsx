@@ -6,11 +6,15 @@ import { signIn, useSession, getSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect } from "react"
 import toast from "react-hot-toast"
+import { useCurrentUser } from "@/hooks/user";
+
 
 const client = getGraphQLClient();
 
 export default function GoogleSignInButton() {
   const { data: session, status } = useSession()
+  const currentUser = useCurrentUser();
+  const user = currentUser?.data?.getCurrentUser;
 
   useEffect(() => {
     const fetchAndExchangeToken = async () => {
@@ -44,7 +48,7 @@ export default function GoogleSignInButton() {
       fetchAndExchangeToken()
     }
   }, [status])
-  if (status === "authenticated") {
+  if (user) {
     return (
       <div
         style={{
@@ -56,7 +60,7 @@ export default function GoogleSignInButton() {
           textAlign: "center",
         }}
       >
-        <p>Welcome, {session?.user?.name} 👋</p>
+        <p>Welcome, {user?.firstName} {user?.lastName} 👋</p>
       </div>
     )
   }
