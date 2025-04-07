@@ -1,9 +1,13 @@
 "use client"
 
-import { graphqlClient } from "@/graphql/graphqlClient"
+import { getGraphQLClient } from "@/graphql/graphqlClient"
+import { verifyUserGoogleTokenQuery } from "@/graphql/query/user"
 import { signIn, useSession, getSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect } from "react"
+import toast from "react-hot-toast"
+
+const client = getGraphQLClient();
 
 export default function GoogleSignInButton() {
   const { data: session, status } = useSession()
@@ -11,46 +15,101 @@ export default function GoogleSignInButton() {
   useEffect(() => {
     const fetchAndExchangeToken = async () => {
       const currentSession = await getSession()
-      const googlelAuthToken = (currentSession as any)?.accessToken
-
-      if (googlelAuthToken) {
-        try {
-          const {jwtToken}: any = await graphqlClient.request('dummuy query', {token: googlelAuthToken })
-
-          const data = await jwtToken.json()
-          console.log("🎯 Your App JWT:", jwtToken)
-
-          // Store it locally (you can also use cookies)
-          localStorage.setItem("jwt_token", data.jwt)
-        } catch (err) {
-          console.error("❌ Failed to exchange token:", err)
-        }
+      const googleAuthToken = (currentSession as any)?.idToken // ✅ fix casing
+  
+      if (!googleAuthToken) {
+        toast.error("No token found. Please try signing in again.")
+        return
+      }
+  
+      const toastId = toast.loading("Authenticating with backend...")
+  
+      try {
+        const { verifyGoogleToken }: any = await client.request(
+          verifyUserGoogleTokenQuery,
+          { token: googleAuthToken }
+        )
+  
+        localStorage.setItem("jwt_token", verifyGoogleToken) // ✅ correct value
+  
+        toast.success("Successfully signed in!", { id: toastId })
+        console.log("🎯 Your App JWT:", verifyGoogleToken)
+      } catch (err) {
+        console.error("❌ Failed to exchange token:", err)
+        toast.error("Token verification failed", { id: toastId })
       }
     }
-
+  
     if (status === "authenticated") {
       fetchAndExchangeToken()
     }
   }, [status])
-
   if (status === "authenticated") {
     return (
-      <div className="bg-gray-800 text-white rounded-lg p-6 shadow-md text-center">
+      <div
+        style={{
+          marginTop: "10px",
+          borderRadius: "10px",
+          background: "grey",
+          padding: "10px 15px 10px 10px",
+          color: "white",
+          textAlign: "center",
+        }}
+      >
         <p>Welcome, {session?.user?.name} 👋</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-gray-800 text-white rounded-lg p-6 shadow-md">
-      <div className="mb-2 text-center font-semibold mt-[10px] bg-gray-600 text-white rounded py-1">
+    <div
+      style={{
+        marginTop: "10px",
+        borderRadius: "10px",
+        background: "grey",
+        padding: "10px 15px 10px 10px",
+        color: "white",
+      }}
+    >
+      <div
+        style={{
+          marginBottom: "8px",
+          textAlign: "center",
+          fontWeight: "600",
+          backgroundColor: "#4B5563",
+          borderRadius: "6px",
+          padding: "6px 0",
+        }}
+      >
         Sign in Using Google
       </div>
       <button
         onClick={() => signIn("google")}
-        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md 
-                   bg-[aliceblue] text-black ml-[28px] mt-[10px] mb-[10px] transition-all duration-200 
-                   hover:bg-blue-100 hover:scale-[1.02] hover:shadow-lg"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          padding: "8px 16px",
+          border: "1px solid #D1D5DB",
+          borderRadius: "6px",
+          backgroundColor: "aliceblue",
+          color: "black",
+          marginLeft: "2px",
+          marginTop: "10px",
+          marginBottom: "10px",
+          cursor: "pointer",
+          transition: "all 0.2s ease-in-out",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = "#dbeafe"
+          e.currentTarget.style.transform = "scale(1.02)"
+          e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)"
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = "aliceblue"
+          e.currentTarget.style.transform = "scale(1)"
+          e.currentTarget.style.boxShadow = "none"
+        }}
       >
         <Image
           src="https://developers.google.com/identity/images/g-logo.png"

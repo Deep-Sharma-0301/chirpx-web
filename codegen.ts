@@ -3,11 +3,11 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "http://localhost:3000/graphql",
-  documents: "**/*.{tsx,ts}",
+  schema: "http://localhost:8000/graphql", //take all the schemas from here
+  documents: "**/*.{tsx,ts}",  // watch over all the typescripts and tsx files in this folder
   generates: {
-    gql: {
-      preset: "client",
+    "gql/": {
+      preset: "client", // generate all the typescript for frontend queries in this particular folder
       plugins: []
     },
     "./graphql.schema.json": {
