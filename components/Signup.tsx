@@ -1,6 +1,6 @@
 "use client"
 
-import { graphqlClient } from "@/client/api"
+import { graphqlClient } from "@/graphql/graphqlClient"
 import { signIn, useSession, getSession } from "next-auth/react"
 import Image from "next/image"
 import { useEffect } from "react"
@@ -15,7 +15,7 @@ export default function GoogleSignInButton() {
 
       if (googlelAuthToken) {
         try {
-          const {jwtToken} = await graphqlClient.request('dummuy query', {token: googlelAuthToken })
+          const {jwtToken}: any = await graphqlClient.request('dummuy query', {token: googlelAuthToken })
 
           const data = await jwtToken.json()
           console.log("🎯 Your App JWT:", jwtToken)
