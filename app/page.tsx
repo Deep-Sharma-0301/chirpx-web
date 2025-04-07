@@ -11,7 +11,7 @@ export default function Home() {
       <Sidebar></Sidebar>
       </div>
 
-      <div className="col-span-6 border-l border-r border-gray-700">
+      <div className="col-span-6 border-l border-r border-gray-700 ml-[16px]">
         <div>
           {/* {here set the condition that id user is logged in then only show this} */}
           <TweetCard></TweetCard>
