@@ -23,12 +23,12 @@ export default function FollowButton({ userInfoId, currentUserId, following }: P
 
   const handleFollowUser = useCallback(async () => {
     await client.request(followUserMutation as any, { to: userInfoId });
-    await queryClient.invalidateQueries(["curent-user"]);
+    await queryClient.invalidateQueries({ queryKey: ["curent-user"] });
   }, [userInfoId, queryClient]);
 
   const handleUnfollowUser = useCallback(async () => {
     await client.request(unfollowUserMutation as any, { to: userInfoId });
-    await queryClient.invalidateQueries(["curent-user"]);
+    await queryClient.invalidateQueries({ queryKey: ["curent-user"] });
   }, [userInfoId, queryClient]);
 
   if (!currentUserId || currentUserId === userInfoId) return null;
