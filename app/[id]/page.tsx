@@ -1,10 +1,8 @@
-// app/[id]/page.tsx
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // required for dynamic routing
 
-import { Metadata } from "next";
 import UserProfilePage from "@/components/UserProfile";
-import { getGraphQLClient } from "@/graphql/graphqlClient";
 import { getUserByIdQuery } from "@/graphql/query/user";
+import { getGraphQLClient } from "@/graphql/graphqlClient";
 import { User } from "@/gql/graphql";
 
 const client = getGraphQLClient();
@@ -14,23 +12,27 @@ async function getUserData(id: string): Promise<User> {
   return userInfo.getUserById as User;
 }
 
-// ✅ Metadata function with correct signature
+// ✅ Fix for generateMetadata — await params
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
-}): Promise<Metadata> {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
   return {
-    title: `@${params.id}`,
+    title: `@${id}`,
   };
 }
 
-// ✅ Component with explicit type, no Promise confusion
-export default async function Page({
+// ✅ Fix for main page component — await params
+export default async function UserProfilePageWrapper({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const userInfo = await getUserData(params.id);
+  const { id } = await params;
+  const userInfo = await getUserData(id);
+
   return <UserProfilePage userInfo={userInfo} />;
 }
