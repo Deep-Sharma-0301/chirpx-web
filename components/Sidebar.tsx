@@ -68,13 +68,14 @@ export default function Sidebar() {
         <div
   className="flex items-center gap-3 mb-[25px] px-2 py-2 hover:bg-[#1d1f23] rounded-full transition"
   onClick={() => router.push(`/${user?.id}`)}
->          <Image
-            src={user.profileImageURL}
-            alt="Profile"
-            width={40}
-            height={40}
-            className="rounded-full mr-[10px]"
-          />
+>          {user?.profileImageURL && (
+  <Image
+    src={user.profileImageURL}
+    alt="Profile"
+    width={40}
+    height={40}
+  />
+)}
           <span className="font-medium">{user.firstName} {user.lastName}</span>
         </div>
       )}

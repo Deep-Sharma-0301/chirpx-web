@@ -15,7 +15,8 @@ export const useCreateTweet = () => {
       client.request(createTweetMutation, { payload }),
     onMutate: (payload) => toast.loading("Creating Tweet", { id: "1" }),
     onSuccess: async (payload) => {
-      await queryClient.invalidateQueries(["all-tweets"]);
+      await queryClient.invalidateQueries({ queryKey: ["all-tweets"] });
+
       toast.success("Created Success", { id: "1" });
     },
   });

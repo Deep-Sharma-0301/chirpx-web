@@ -1,9 +1,10 @@
-import AuthError from "@/components/Error"
+import { Suspense } from "react";
+import AuthError from "@/components/Error";
 
 export default function ErrorPage() {
-    return (
-        <div>
-            <AuthError></AuthError>
-        </div>
-    )
+  return (
+    <Suspense fallback={<div>Loading error...</div>}>
+      <AuthError />
+    </Suspense>
+  );
 }
