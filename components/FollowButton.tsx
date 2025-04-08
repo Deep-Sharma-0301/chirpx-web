@@ -1,6 +1,6 @@
 'use client';
 
-import { followUserMutation, unfollowUserMutation } from "@/graphql/mutation/user";
+import { followUserMutation, unfollowUserMutation } from "@/graphql/mutations/user";
 import { getGraphQLClient } from "@/graphql/graphqlClient";
 import { useCurrentUser } from "@/hooks/user";
 import { useCallback, useMemo } from "react";
@@ -22,12 +22,12 @@ export default function FollowButton({ userInfoId, currentUserId, following }: P
   }, [following, userInfoId]);
 
   const handleFollowUser = useCallback(async () => {
-    await client.request(followUserMutation, { to: userInfoId });
+    await client.request(followUserMutation as any, { to: userInfoId });
     await queryClient.invalidateQueries(["curent-user"]);
   }, [userInfoId, queryClient]);
 
   const handleUnfollowUser = useCallback(async () => {
-    await client.request(unfollowUserMutation, { to: userInfoId });
+    await client.request(unfollowUserMutation as any, { to: userInfoId });
     await queryClient.invalidateQueries(["curent-user"]);
   }, [userInfoId, queryClient]);
 
